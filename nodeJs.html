@@ -1,3 +1,28 @@
  <!-- How would you create a POST API using Express to save a product with name and price into MongoDB? -->
+<!-- setup -->
+ const express = require("express");
+ const mongoose = require("mongoose");
+ const app = express();
+ app.use(express.json())
 
- 
+ <!-- connect to MOngoDB -->
+  mongoose.connect("mongodb://........./store", {
+    useNewUrlParser: true,
+    useUnitedTopology: true,
+  });
+
+  <!-- Define schema and mmodel -->
+   const Product = mongoose.model("Product", new mongoose.schema({
+    name: String,
+    price: Number,
+   }));
+<!-- post route to add product -->
+   app.post("/api/products", async (req, res) => {
+    const { name, price} = req.body;
+    const newProduct = new Product({ name, price });
+    await newProduct.save();
+    res.status(201).json(newProduct);
+   })
+
+   <!-- start server -->
+    app.listen(3000, ()=> conosle.log("Server running on port 3000"));
